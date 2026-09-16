@@ -20,7 +20,9 @@
           "sections": [],
           "accessRoles": null,
           "privileges": null,
-          "tagIds": null
+          "tagIds": null,
+          "composableIcon": "",
+          "composableCategory": ""
         }
       ],
       "accessRoles": null,
@@ -33,7 +35,10 @@
       "pageDefinitionId": "8d3e3cf2-df64-4a69-b80d-641a64f94a51",
       "name": "Section2",
       "icon": "Alert Circle",
-      "sections": []
+      "sections": [],
+      "tagIds": null,
+      "composableIcon": "",
+      "composableCategory": ""
     }
   ],
   "tagIds": null,
