@@ -1,0 +1,30 @@
+{
+  "accessRoles": [],
+  "applicationId": "f4cf92ad-baa4-4e09-9ef9-387bc773c233",
+  "applicationName": "GitApp1",
+  "applicationState": "DRAFT",
+  "defaultBranch": "main",
+  "gitUrl": "https://github.com/skalagesan/extend_gitapp",
+  "icon": "LogoIconOnlyAdvancedQuotaPlanningComponent",
+  "sections": [
+    {
+      "name": "Section1",
+      "icon": "AI Spark",
+      "description": "",
+      "sections": [
+        {
+          "name": "SubSection",
+          "icon": "Address Book",
+          "pageDefinitionId": "3fffdecf-1ffa-4712-ac1b-83ada3bb4e92",
+          "description": "",
+          "sections": [],
+          "accessRoles": null,
+          "privileges": null
+        }
+      ],
+      "accessRoles": null,
+      "privileges": null
+    }
+  ],
+  "tagIds": []
+}
