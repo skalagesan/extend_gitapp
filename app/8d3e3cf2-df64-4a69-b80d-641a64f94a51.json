@@ -1,0 +1,66 @@
+{
+  "description": null,
+  "pageDefinitionId": "8d3e3cf2-df64-4a69-b80d-641a64f94a51",
+  "pageSchema": {
+    "properties": {},
+    "controlSchema": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "control_1": {
+            "type": "xSQLButton",
+            "controlId": "0545b6bf-9a65-4e49-9815-14851bb317e7",
+            "privileges": null,
+            "styles": {
+              "useComponentShadow": false,
+              "useGreyBackground": false,
+              "useInnerGreyBackground": false
+            },
+            "internalName": "XSQL Button Component",
+            "events": [],
+            "controlData": "xSQL Button",
+            "xSQL": "select Count(*) from xc_business_groups\nWHERE\n(\n  :v_search_name is null\n  OR\n  Lowercase(name) LIKE Lowercase(Concat('%',:v_search_name,'%'))\n)",
+            "layoutSize": null,
+            "buttonColorType": "primary",
+            "shouldRenderHidden": false
+          },
+          "control_2": {
+            "type": "xSQLRunner",
+            "controlId": "50f7d3be-dfcf-4e93-91d0-07ce1e805c0b",
+            "privileges": null,
+            "styles": {
+              "useComponentShadow": false,
+              "useGreyBackground": false,
+              "useInnerGreyBackground": false
+            },
+            "internalName": "XSQL Runner Component",
+            "events": [],
+            "xSQL": "select xc.earning_group_name, xc.customer_name, xc.credit_type_id, xc.order_code, xc.item_code, xc.incentive_date, mtd_credit_amount,  mtd_commission_amount,   mtd_held, case when is_held = 0 then mtd_commission_amount else mtd_released end mtd_released, customer_number, customer_po_number, product_name, descr, geography_name, incentive_date, fl_id,  rate_amount_clean,  rate_amount, is_held from (\nselect xc.earning_group_name, xc.customer_name, xc.credit_type_id, xc.order_code, xc.item_code, xc.incentive_date, FormatNumber(xcr.amount, '###,##0.00')  mtd_credit_amount, FormatNumber(Sum(xc.amount), '###,##0.00')  mtd_commission_amount, FormatNumber(Sum(xc.held_amount), '###,##0.00')  mtd_held, FormatNumber(Sum(xc.released_amount), '###,##0.00')  mtd_released, customer_number, customer_po_number, product_name, descr, geography_name, incentive_date, fl_id, max(rate_amount) rate_amount_clean, FormatNumber(rate_amount_clean,'#0.00##') || ' %' rate_amount, is_held\nfrom xactly.xc_commission xc \n   inner join xc_credit xcr on xc.customer_name = xcr.customer_name and xc.credit_type_id = xcr.credit_type_id and xc.order_code = xcr.order_code  and xc.item_code = xcr.item_code\n   inner join xc_comp_order_item oi on xcr.order_code = oi.order_code and xcr.item_code = oi.item_code\n where \n  xc.participant_id = :v_master_participant_id --'29501692543'\n  and xc.period_name = :v_current_period\n  and (:v_period_detail = 'Monthly')\n  and xc.customer_name = :v_customer_name\n  and (earning_Group_name = :v_earning_detail or :v_earning_detail = 'Monthly' or :v_earning_detail = 'All') )"
+          },
+          "control_3": {
+            "type": "xsqlWorkflowTrigger",
+            "controlId": "f19f41e4-7a1f-4b8f-ab13-00d604a57cf4",
+            "privileges": null,
+            "styles": {
+              "useComponentShadow": false,
+              "useGreyBackground": false,
+              "useInnerGreyBackground": false
+            },
+            "internalName": "XSQL Workflow Trigger Component",
+            "events": [],
+            "controlData": "xSQL / Workflow Button",
+            "xSQL": "select c_period.name, c_period_q.name as q_period, c_period_y.name y_name\n\tfrom xc_period c_period \n    \tinner join xc_period c_period_q on c_period.parent_period_id = c_period_q.period_id \n        inner join xc_period c_period_y on c_period_q.parent_period_id = c_period_y.period_id\nwhere c_period.name = :v_current_period\"\n\"select \n\tcase when earning_Group_name like '%Bonus%' then 'BONUS' \n    \twhen earning_Group_name like '%Adjustment%' or src_type = 'MANUAL_PAYMENT' THEN 'ADJUSTMENTS' \n        when earning_group_name = 'MBO' then 'MBO' \n        else 'BOOKED AND RELEASED IN ' || :v_current_quarter \n\tend component_name\n\t, case when earning_Group_name like '%Bonus%' then 2 \n    \twhen earning_Group_name like '%Adjustment%' or src_type = 'MANUAL_PAYMENT' THEN 4 \n        when earning_group_name = 'MBO' then 3 \n        else 1 \n    end ord\n    ,Sum(amount) sum_amount_clean\n    ,FormatNumber(sum_amount_clean,'#,##0.00;(#,##0.00)') sum_amount \nfrom xc_payment p1 \n\tinner join xc_period c_period on p1.period_id = c_period.period_id\n    inner join xc_period c_period_q on c_period.parent_period_id = c_period_q.period_id\nwhere \n\tparticipant_id = :v_master_participant_id \n    and c_period_q.name = LookupPeriodName(incentive_date,'QUARTERLY') \n    and c_period_q.name  = :v_current_quarter\n    and c_period.end_date <= (select end_date from xc_period where name = :v_current_period)\nunion\nselect  \n\t'RELEASED FROM PRIOR QUARTERS OF ' || LookupPeriodName(c_period.start_date,'YEARLY') component_name\n    , 5 ord\n    ,Sum(amount) sum_amount_clean\n    , FormatNumber(sum_amount_clean,'#,##0.00;(#,##0.00)') sum_amount \nfrom xc_payment p1 \n\tinner join xc_period c_period on p1.period_id = c_period.period_id\n    inner join xc_period c_period_q on c_period.parent_period_id = c_period_q.period_id\n    inner join xc_period c_period_y on c_period_q.parent_period_id = c_period_y.period_id\nwhere \n\tparticipant_id = :v_master_participant_id \n    and c_period_y.name = LookupPeriodName(incentive_date,'YEARLY') \n    and c_period_q.name  = :v_current_quarter \n    and c_period_q.name <> LookupPeriodName(incentive_date,'QUARTERLY') \n    and c_period.end_date <= (select end_date from xc_period where name = :v_current_period)\nunion\n(select  \n \t'RELEASED FROM PRIOR YEARS' component_name\n \t,6 ord\n \t,Sum(amount) sum_amount_clean\n \t,FormatNumber(sum_amount_clean,'#,##0.00;(#,##0.00)') sum_amount\n from xc_payment p1 \n \tinner join xc_period c_period on p1.period_id = c_period.period_id\n    inner join xc_period c_period_q on c_period.parent_period_id = c_period_q.period_id\n \tinner join xc_period c_period_y on c_period_q.parent_period_id = c_period_y.period_id\n where \n \tparticipant_id = :v_master_participant_id \n \tand c_period_y.name <> LookupPeriodName(incentive_date,'YEARLY') \n \tand c_period_q.name  = :v_current_quarter \n \tand c_period.end_date <= (select end_date from xc_period where name = :v_current_period)\n  union select 'NO PAYMENT', 7 ord, null from Empty() limit 1)\n\norder by ord",
+            "workflowXsql": "",
+            "workflowName": "",
+            "layoutSize": null,
+            "buttonColorType": "primary",
+            "shouldRenderHidden": false,
+            "shouldRunSync": false
+          }
+        }
+      }
+    }
+  },
+  "title": "Page1",
+  "versionName": "1.0"
+}

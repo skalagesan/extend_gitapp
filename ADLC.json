@@ -1,7 +1,8 @@
 {
   "application": "app/Application.json",
   "pageDefinitions": [
-    "app/3fffdecf-1ffa-4712-ac1b-83ada3bb4e92.json"
+    "app/3fffdecf-1ffa-4712-ac1b-83ada3bb4e92.json",
+    "app/8d3e3cf2-df64-4a69-b80d-641a64f94a51.json"
   ],
   "compositeComponents": []
 }

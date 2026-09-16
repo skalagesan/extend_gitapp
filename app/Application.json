@@ -4,7 +4,6 @@
   "applicationName": "GitApp1",
   "applicationState": "DRAFT",
   "defaultBranch": "main",
-  "description": null,
   "gitUrl": "https://github.com/skalagesan/extend_gitapp",
   "icon": "LogoIconOnlyAdvancedQuotaPlanningComponent",
   "sections": [
@@ -27,6 +26,14 @@
       "accessRoles": null,
       "privileges": null,
       "tagIds": null
+    },
+    {
+      "accessRoles": null,
+      "privileges": null,
+      "pageDefinitionId": "8d3e3cf2-df64-4a69-b80d-641a64f94a51",
+      "name": "Section2",
+      "icon": "Alert Circle",
+      "sections": []
     }
   ],
   "tagIds": null,
