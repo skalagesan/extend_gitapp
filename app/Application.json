@@ -1,9 +1,10 @@
 {
-  "accessRoles": [],
+  "accessRoles": null,
   "applicationId": "f4cf92ad-baa4-4e09-9ef9-387bc773c233",
   "applicationName": "GitApp1",
   "applicationState": "DRAFT",
   "defaultBranch": "main",
+  "description": null,
   "gitUrl": "https://github.com/skalagesan/extend_gitapp",
   "icon": "LogoIconOnlyAdvancedQuotaPlanningComponent",
   "sections": [
@@ -19,12 +20,15 @@
           "description": "",
           "sections": [],
           "accessRoles": null,
-          "privileges": null
+          "privileges": null,
+          "tagIds": null
         }
       ],
       "accessRoles": null,
-      "privileges": null
+      "privileges": null,
+      "tagIds": null
     }
   ],
-  "tagIds": []
+  "tagIds": null,
+  "themeConfig": "{\"themeColor\":\"blue\"}"
 }
